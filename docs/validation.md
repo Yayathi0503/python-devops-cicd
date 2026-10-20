@@ -7,6 +7,6 @@ Date: 20 October 2026 (Asia/Kolkata).
 - Docker build succeeded. Running /health, /metrics/, and /predict returned HTTP 200. Kubernetes deployment reached 1/1 ready; in-cluster /health returned status ok.
 - Local cluster: Docker Desktop, Kubernetes 1.36.1; isolated namespace codex-portfolio-20261020.
 - Source review and credential-pattern scan found no embedded credentials; this is not a formal security audit.
-- GitHub Actions: pending initial publication.
+- GitHub Actions: [run 39464216578](https://github.com/Yayathi0503/python-devops-cicd/actions/runs/39464216578) passed for source commit eb2e88e4fc805d1a7eeee0ce5a5c15d6b5bd1fe3. Tests, image build, health check, and prediction check passed. The initial startup-check failure was fixed by retrying transient connection resets.
 
 No cloud or production deployment was performed. No production availability, performance improvement, business impact, or real-world prediction accuracy is claimed.

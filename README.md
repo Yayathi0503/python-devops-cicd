@@ -57,6 +57,8 @@ docker run --rm -p 8000:8000 python-devops-cicd:local
 
 Validate http://127.0.0.1:8000/health. Stop the container with Ctrl+C.
 
+[![Python CI](https://github.com/Yayathi0503/python-devops-cicd/actions/workflows/ci.yml/badge.svg)](https://github.com/Yayathi0503/python-devops-cicd/actions/workflows/ci.yml)
+
 ## GitHub Actions CI
 
 The workflow in `.github/workflows/ci.yml` runs on push and pull requests. It installs dependencies, runs tests, and builds an image (it **does not** publish or deploy the image). Check the repository's **Actions** tab for actual run results.
@@ -98,7 +100,7 @@ The app exposes Prometheus-compatible metrics at `/metrics/`. `monitoring/promet
 - [x] Local Python 3.12 tests: 6 passed (20 October 2026)
 - [x] Container `/health`, `/metrics/`, and `/predict` returned HTTP 200
 - [x] Docker build and run verified on Docker Desktop
-- [ ] GitHub Actions build green after push
+- [x] GitHub Actions tests, build, and running-container checks passed
 - [x] Kubernetes rollout and in-cluster health endpoint verified on Docker Desktop (20 October 2026)
 - [ ] Screenshots added to `docs/screenshots/` (optional)
 
