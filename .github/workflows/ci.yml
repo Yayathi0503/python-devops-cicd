@@ -28,5 +28,5 @@ jobs:
         run: |
           docker run -d --name api -p 127.0.0.1:8000:8000 python-devops-cicd:ci
           trap 'docker logs api; docker rm -f api' EXIT
-          curl --fail --retry 20 --retry-connrefused --retry-delay 2 http://127.0.0.1:8000/health
+          curl --fail --retry 20 --retry-all-errors --retry-delay 2 http://127.0.0.1:8000/health
           curl --fail -H 'Content-Type: application/json' -d '{"attendance":80,"marks":75,"assignment_score":70}' http://127.0.0.1:8000/predict

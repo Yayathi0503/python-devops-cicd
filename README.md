@@ -1,6 +1,6 @@
 # Automated CI Pipeline and Containerized Python Application
 
-**Portfolio starter project — local Python API, tests, GitHub Actions CI, Docker and optional local Kubernetes.**
+**Portfolio demonstration: FastAPI student-record API, automated tests, Docker builds, and local Kubernetes configuration.**
 
 > This educational project uses synthetic examples. The workflow implements continuous integration, including container smoke tests; it does not deploy to production.
 
