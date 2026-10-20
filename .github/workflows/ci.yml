@@ -1,0 +1,32 @@
+name: Python CI (tests and Docker build)
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Install Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Run tests
+        run: python -m pytest -q
+      - name: Build Docker image
+        run: docker build -t python-devops-cicd:ci .
+      - name: Smoke-test container health and prediction
+        run: |
+          docker run -d --name api -p 127.0.0.1:8000:8000 python-devops-cicd:ci
+          trap 'docker logs api; docker rm -f api' EXIT
+          curl --fail --retry 20 --retry-connrefused --retry-delay 2 http://127.0.0.1:8000/health
+          curl --fail -H 'Content-Type: application/json' -d '{"attendance":80,"marks":75,"assignment_score":70}' http://127.0.0.1:8000/predict

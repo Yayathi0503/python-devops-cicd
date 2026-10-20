@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: student-analytics
+spec:
+  replicas: 1 # SQLite demo: do not scale without replacing database
+  selector:
+    matchLabels:
+      app: student-analytics
+  template:
+    metadata:
+      labels:
+        app: student-analytics
+    spec:
+      containers:
+        - name: api
+          image: python-devops-cicd:local
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 15
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: student-analytics
+spec:
+  type: ClusterIP
+  selector:
+    app: student-analytics
+  ports:
+    - port: 8000
+      targetPort: 8000

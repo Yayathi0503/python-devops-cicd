@@ -1,0 +1,26 @@
+# Local Python and IDE files
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.vscode/
+.idea/
+# Do not commit secrets, databases, or generated models
+.env
+.env.*
+!.env.example
+*.db
+*.sqlite
+*.sqlite3
+models/
+*.joblib
+# OS
+.DS_Store
+Thumbs.db
+
+*.pem
+*.key
+*.p12
+.coverage
+htmlcov/
