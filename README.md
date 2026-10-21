@@ -1,5 +1,9 @@
 # Automated CI Pipeline and Containerized Python Application
 
+## Task Management API project
+
+The separate [Task Management API](task-management-api/README.md) adds a Flask CRUD API, persistent SQLite storage, 14 tests, Docker Compose, Minikube manifests, a local Terraform exercise, and running Prometheus/Grafana monitoring. Its workflow is `.github/workflows/task-api.yml`. See [verification notes](task-management-api/VERIFICATION.md) for completed checks and pending cloud deployment.
+
 **Portfolio demonstration: FastAPI student-record API, automated tests, Docker builds, and local Kubernetes configuration.**
 
 > This educational project uses synthetic examples. The workflow implements continuous integration, including container smoke tests; it does not deploy to production.

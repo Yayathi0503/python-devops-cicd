@@ -1,0 +1,30 @@
+name: Task API tests and container
+on:
+  push:
+    paths: ['task-management-api/**', '.github/workflows/task-api.yml']
+  pull_request:
+    paths: ['task-management-api/**', '.github/workflows/task-api.yml']
+permissions:
+  contents: read
+jobs:
+  task-api:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: task-management-api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: task-management-api/requirements-lock.txt
+      - run: pip install -r requirements-lock.txt
+      - run: python -m pytest -q
+      - run: docker build -t task-management-api:ci .
+      - name: Test running container
+        run: |
+          docker run -d --name task-api-ci -p 127.0.0.1:8080:8080 task-management-api:ci
+          trap 'docker logs task-api-ci; docker rm -f task-api-ci' EXIT
+          curl --fail --retry 15 --retry-all-errors --retry-delay 2 http://localhost:8080/ready
+          python smoke_test.py http://localhost:8080
