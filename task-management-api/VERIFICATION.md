@@ -13,9 +13,15 @@
 - Prometheus reported the task-api scrape target `up` with no error.
 - Grafana health check reported database `ok`; provisioned `Task Management API` dashboard was returned by its API.
 
+## GitHub
+
+- Published on branch `codex/task-management-api` in `Yayathi0503/python-devops-cicd`, under `task-management-api/`.
+- GitHub Actions Task API tests and container run passed: https://github.com/Yayathi0503/python-devops-cicd/actions/runs/39545715812
+- The existing student API workflow also passed: https://github.com/Yayathi0503/python-devops-cicd/actions/runs/39545715769
+- Pull-request creation is pending because the connector denied write access. The branch is published; no merge was performed.
+
 ## Pending external stages
 
-- GitHub publishing and hosted CI verification are tracked in the pull request created for this project.
 - AWS cloud deployment is not performed. No AWS resources or credentials are configured by this project.
 
 ## Reproduce
