@@ -1,5 +1,18 @@
 # Validation record
 
+## 23 October 2026 update (Asia/Kolkata)
+
+- Source commit: `c2903ed6b240a286f19268f6fc153d3adf00de94`.
+- Windows Python 3.12: 9 tests passed, including database-unavailable readiness and isolated student records. One upstream Starlette/httpx deprecation warning remains.
+- `python -m pip check`: no broken requirements.
+- [GitHub Actions run 39945080797](https://github.com/Yayathi0503/python-devops-cicd/actions/runs/39945080797): tests, Docker build, and running-container health, liveness, readiness, metrics, and prediction checks all passed.
+- Docker engine was stopped locally and its CLI launcher configuration was unavailable. No new local container or Kubernetes rollout was performed; the updated manifest's probes still need a local rollout check.
+- Existing Flask project under `task-management-api/` and the original desktop project folder were not modified.
+- Changes are on `codex/fastapi-health-ci`. GitHub connector returned HTTP 403 when creating a PR; the review branch was successfully pushed using existing Git access.
+- No cloud infrastructure or job-search automation was created.
+
+## Earlier verification
+
 Date: 20 October 2026 (Asia/Kolkata).
 
 - Python 3.12: 6 tests passed.

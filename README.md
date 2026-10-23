@@ -119,10 +119,12 @@ The app exposes Prometheus-compatible metrics at `/metrics/`. `monitoring/promet
 
 ## Resume description
 
-*Implemented a FastAPI demonstration API with SQLite CRUD operations, input validation, Prometheus-compatible metrics, six automated tests, and a Docker container with a synthetic-data prediction endpoint. Added GitHub Actions CI and local Kubernetes manifests.*
+*Implemented a FastAPI demonstration API with SQLite CRUD operations, input validation, Prometheus-compatible metrics, nine automated tests, and a Docker container with a synthetic-data prediction endpoint. Added database-readiness and process-liveness probes, GitHub Actions CI, and local Kubernetes manifests.*
 
 ## Verified environment
 
 Validation on 20 October 2026: Windows 11, Python 3.12, Docker Desktop engine 29.8.2, and local Kubernetes 1.36.1. The API was deployed in an isolated local namespace with one ready replica. The kind commands above are provided as an alternative; kind itself was not used for this validation.
 
 See [validation notes](docs/validation.md). SQLite data is ephemeral in this demo; a pod replacement can discard records.
+
+Latest verification (23 October 2026): nine tests passed on Windows Python 3.12; dependency checks passed. [GitHub Actions run](https://github.com/Yayathi0503/python-devops-cicd/actions/runs/39945080797) passed tests, Docker build, and container checks for health, liveness, readiness, metrics, and prediction. The updated Kubernetes probes were reviewed but not deployed during this run because the local Docker engine was unavailable.
