@@ -14,3 +14,11 @@ models
 *.joblib
 tests
 README.md
+task-management-api
+docs
+k8s
+monitoring
+*.sqlite3
+*.pem
+*.key
+*.p12

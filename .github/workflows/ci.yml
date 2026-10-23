@@ -10,6 +10,7 @@ permissions:
 jobs:
   test-and-build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
@@ -29,4 +30,7 @@ jobs:
           docker run -d --name api -p 127.0.0.1:8000:8000 python-devops-cicd:ci
           trap 'docker logs api; docker rm -f api' EXIT
           curl --fail --retry 20 --retry-all-errors --retry-delay 2 http://127.0.0.1:8000/health
+          curl --fail http://127.0.0.1:8000/health/live
+          curl --fail http://127.0.0.1:8000/health/ready
+          curl --fail http://127.0.0.1:8000/metrics/
           curl --fail -H 'Content-Type: application/json' -d '{"attendance":80,"marks":75,"assignment_score":70}' http://127.0.0.1:8000/predict

@@ -40,6 +40,14 @@ python -m uvicorn app.main:app --reload
 
 Open http://127.0.0.1:8000/docs and http://127.0.0.1:8000/health. The browser should show `{"status":"ok"}` at `/health`.
 
+Health endpoints:
+
+- `/health` and `/health/live` return `{"status":"ok"}` while the API process can respond.
+- `/health/ready` checks access to the student table and returns `{"status":"ready"}`, or HTTP 503 when the database is unavailable. Kubernetes uses this to decide when to send traffic.
+- `/metrics/` exposes Prometheus metrics; `/docs` provides interactive API documentation.
+
+The separate Flask project is preserved in `task-management-api/`; run it using its own README and requirements. Root commands run the FastAPI project.
+
 ### API examples
 
 `POST /students` with JSON:
@@ -56,7 +64,7 @@ From the repo root:
 
 ```powershell
 docker build -t python-devops-cicd:local .
-docker run --rm -p 8000:8000 python-devops-cicd:local
+docker run --rm -p 127.0.0.1:8000:8000 python-devops-cicd:local
 ```
 
 Validate http://127.0.0.1:8000/health. Stop the container with Ctrl+C.
@@ -74,6 +82,7 @@ Requires Docker Desktop, `kind`, and `kubectl`.
 ```powershell
 kind create cluster --name python-devops-demo
 kind load docker-image python-devops-cicd:local --name python-devops-demo
+kubectl config use-context kind-python-devops-demo
 kubectl apply -f k8s/deployment.yaml
 kubectl rollout status deployment/student-analytics
 kubectl port-forward service/student-analytics 8000:8000

@@ -6,6 +6,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from sqlalchemy import create_engine, Column, Integer, String, Float, select
 from sqlalchemy.orm import DeclarativeBase, Session
+from sqlalchemy.exc import SQLAlchemyError
 from prometheus_client import make_asgi_app
 import joblib
 import pandas as pd
@@ -44,8 +45,20 @@ class PredictIn(BaseModel):
     assignment_score: float = Field(ge=0, le=100)
 
 @app.get("/health")
+@app.get("/health/live")
 def health():
     return {"status": "ok"}
+
+@app.get("/health/ready")
+def readiness():
+    # Check the required student table, not only process availability.
+    try:
+        with Session(engine) as session:
+            session.execute(select(Student.id).limit(1))
+    except SQLAlchemyError:
+        raise HTTPException(status_code=503, detail="Database unavailable") from None
+    return {"status": "ready"}
+
 @app.post("/students", response_model=StudentOut, status_code=201)
 def create_student(body: StudentIn):
     with Session(engine) as session:

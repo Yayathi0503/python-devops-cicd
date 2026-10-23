@@ -1,4 +1,5 @@
 import os
+import pytest
 os.environ["DATABASE_URL"] = "sqlite://"
 from sqlalchemy.pool import StaticPool
 from fastapi.testclient import TestClient
@@ -8,6 +9,34 @@ from app import main
 main.engine.dispose()
 main.engine = main.create_engine("sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool)
 main.Base.metadata.create_all(main.engine)
+
+@pytest.fixture(autouse=True)
+def isolated_students():
+    main.Base.metadata.drop_all(main.engine)
+    main.Base.metadata.create_all(main.engine)
+    yield
+
+
+def test_liveness_and_readiness():
+    with TestClient(main.app) as c:
+        assert c.get("/health/live").json() == {"status": "ok"}
+        assert c.get("/health/ready").json() == {"status": "ready"}
+
+
+def test_readiness_fails_when_database_schema_unavailable():
+    with TestClient(main.app) as c:
+        main.Base.metadata.drop_all(main.engine)
+        response = c.get("/health/ready")
+        assert response.status_code == 503
+        assert response.json() == {"detail": "Database unavailable"}
+        assert c.get("/health/live").status_code == 200
+
+
+def test_empty_summary():
+    with TestClient(main.app) as c:
+        assert c.get("/reports/summary").json() == {
+            "count": 0, "average_marks": None, "average_attendance": None
+        }
 
 def test_health():
     with TestClient(main.app) as c:
