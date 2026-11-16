@@ -1,0 +1,7 @@
+# Replace this example with the ID of an existing EC2 instance in aws_region.
+instance_id  = "i-0123456789abcdef0"
+aws_region   = "ap-south-1"
+project_name = "task-api"
+
+# Optional: use an existing SNS topic and confirm its email subscription.
+# alarm_actions = ["arn:aws:sns:ap-south-1:123456789012:operations"]

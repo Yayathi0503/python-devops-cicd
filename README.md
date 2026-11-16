@@ -1,5 +1,17 @@
 # Automated CI Pipeline and Containerized Python Application
 
+## Jenkins and AWS CloudWatch portfolio extensions
+
+- [Jenkins pipeline](docs/jenkins.md): pinned dependencies, Pytest/JUnit reports,
+  Docker builds, live container CRUD smoke tests and automatic container cleanup.
+- [AWS CloudWatch monitoring](aws-monitoring/README.md): Terraform dashboard for
+  an existing EC2 instance, CPU/status alarms and container logs with seven-day
+  retention. Includes credential-free tests with a mocked AWS provider.
+
+The code is deployable; a live Jenkins build and AWS deployment require your own
+Jenkins agent and AWS instance/account. See [verification](docs/portfolio-verification.md)
+for checks actually performed.
+
 ## Task Management API project
 
 The separate [Task Management API](task-management-api/README.md) adds a Flask CRUD API, persistent SQLite storage, 14 tests, Docker Compose, Minikube manifests, a local Terraform exercise, and running Prometheus/Grafana monitoring. Its workflow is `.github/workflows/task-api.yml`. See [verification notes](task-management-api/VERIFICATION.md) for completed checks and pending cloud deployment.
@@ -96,7 +108,9 @@ The app exposes Prometheus-compatible metrics at `/metrics/`. `monitoring/promet
 - Do not upload real student records. Demo lacks authentication and authorization.
 - Do not commit secrets, `.env`, generated models, or databases.
 - The synthetic ML model is for code integration only, not actual academic predictions.
-- Cloud deployment, automated production CD, Helm, Prometheus/Grafana installation, and AWS are **not** implemented.
+- Cloud deployment and automated production CD are not included. The AWS
+  monitoring module is available in `aws-monitoring`; Terraform apply and live
+  AWS checks are separate from local validation.
 - Record actual results and errors in the README before calling this a completed resume project.
 
 ## Portfolio evidence checklist

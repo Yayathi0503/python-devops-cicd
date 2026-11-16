@@ -24,3 +24,14 @@ Thumbs.db
 *.p12
 .coverage
 htmlcov/
+
+# Jenkins build output and AWS Terraform local state
+.ci/
+test-results.xml
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfvars
+*.tfvars.json
+crash.log

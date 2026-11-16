@@ -1,0 +1,69 @@
+name: Jenkins checks and AWS monitoring validation
+
+on:
+  push:
+    paths:
+      - Jenkinsfile
+      - scripts/jenkins_container.py
+      - task-management-api/**
+      - aws-monitoring/**
+      - .github/workflows/portfolio.yml
+  pull_request:
+    paths:
+      - Jenkinsfile
+      - scripts/jenkins_container.py
+      - task-management-api/**
+      - aws-monitoring/**
+      - .github/workflows/portfolio.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pipeline-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: task-management-api/requirements-lock.txt
+      - run: python -m pip install -r task-management-api/requirements-lock.txt
+      - name: Run the Jenkins test command
+        working-directory: task-management-api
+        run: python -m pytest -q --junitxml=test-results.xml
+      - name: Build and smoke-test the container
+        run: |
+          mkdir -p .ci
+          docker build --iidfile .ci/image.id task-management-api
+          python scripts/jenkins_container.py smoke
+      - name: Clean up this build's container
+        if: always()
+        run: python scripts/jenkins_container.py cleanup
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pipeline-test-results
+          include-hidden-files: true
+          path: |
+            task-management-api/test-results.xml
+            .ci/container.log
+
+  terraform:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: aws-monitoring
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: '1.16.6'
+      - run: terraform fmt -check -recursive
+      - run: terraform init -backend=false -input=false
+      - run: terraform validate -no-color
+      - run: terraform test -no-color
